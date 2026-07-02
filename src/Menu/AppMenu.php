@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Menu;
 
+use App\Repository\RecipeRepository;
 use Survos\TablerBundle\Event\MenuEvent;
 use Survos\TablerBundle\Traits\KnpMenuHelperInterface;
 use Survos\TablerBundle\Traits\KnpMenuHelperTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AppMenu implements KnpMenuHelperInterface
@@ -16,6 +18,8 @@ final class AppMenu implements KnpMenuHelperInterface
     use KnpMenuHelperTrait;
 
     public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly RecipeRepository $recipeRepository,
         private readonly ?AuthorizationCheckerInterface $authorizationChecker = null,
         private readonly ?Security $security = null,
     ) {
@@ -44,6 +48,7 @@ final class AppMenu implements KnpMenuHelperInterface
 
         $this->add($menu, 'app_homepage', label: 'Home');
         $this->add($menu, 'app_recipes', label: 'Recipes');
+        $this->add($menu, 'app_widget_demo', label: 'Widget Demo');
 
         if ($this->authorizationChecker?->isGranted('ROLE_NGLAYOUTS_ADMIN')) {
             $this->add($menu, 'nglayouts_admin', label: 'Layouts Admin');
@@ -51,6 +56,38 @@ final class AppMenu implements KnpMenuHelperInterface
 
         if ($this->authorizationChecker?->isGranted('ROLE_ADMIN')) {
             $this->add($menu, 'admin', label: 'Recipes Admin');
+        }
+    }
+
+    #[AsEventListener(event: MenuEvent::BREADCRUMB)]
+    public function breadcrumbMenu(MenuEvent $event): void
+    {
+        $menu = $event->getMenu();
+        $request = $this->requestStack->getCurrentRequest();
+        $route = $request?->attributes->get('_route');
+
+        if ($route === null || $route === 'app_homepage') {
+            return;
+        }
+
+        $this->add($menu, 'app_homepage', label: 'Home');
+
+        if ($route === 'app_recipes') {
+            $this->add($menu, 'app_recipes', label: 'Recipes');
+        }
+
+        if ($route === 'app_recipes_show') {
+            $this->add($menu, 'app_recipes', label: 'Recipes');
+
+            $slug = $request?->attributes->get('slug');
+            $recipe = $slug !== null ? $this->recipeRepository->findOneBy(['slug' => $slug]) : null;
+            if ($recipe !== null) {
+                $this->add($menu, 'app_recipes_show', ['slug' => $recipe->getSlug()], label: $recipe->getName(), translationDomain: false);
+            }
+        }
+
+        if ($route === 'app_widget_demo') {
+            $this->add($menu, 'app_widget_demo', label: 'Widget Demo');
         }
     }
 }

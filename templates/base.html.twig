@@ -5,6 +5,23 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/survostabler/tabler/styles.css') }}">
 {% endblock %}
 
+{# Netgen's layout templates (e.g. layout_1.html.twig) override a "layout" block
+   that wraps our normal page content — see nglayouts.pageLayoutTemplate #}
 {% block content %}
-    {{ block('body') }}
+    {% if app.debug %}
+        {% set ngLayout = nglayouts.layout %}
+        {% set ngRule = nglayouts.rule %}
+        <div class="alert alert-important alert-warning mb-0" role="alert" style="border-radius:0;">
+            {% if ngLayout %}
+                <strong>Netgen widget:</strong>
+                layout <code>{{ ngLayout.name }}</code>
+                (type <code>{{ ngLayout.layoutType.identifier }}</code>){% if ngRule %}, matched rule <code>{{ ngRule.description }}</code>{% endif %}
+                — <a href="/nglayouts/app#layout/{{ ngLayout.id }}/edit" target="_blank">Edit this layout</a>
+            {% else %}
+                <strong>Netgen widget:</strong> no Layout Resolver rule matched this page — showing the plain pagelayout fallback.
+            {% endif %}
+        </div>
+    {% endif %}
+    {% block layout %}{% endblock %}
 {% endblock %}
+

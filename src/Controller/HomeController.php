@@ -13,4 +13,10 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
+
+    #[Route(path: '/widget-demo', name: 'app_widget_demo')]
+    public function widgetDemo(): Response
+    {
+        return $this->render('home/widget_demo.html.twig');
+    }
 }

@@ -65,6 +65,7 @@ class RecipeBrowserBackend implements BackendInterface
         return $this->recipeRepository
             ->createQueryBuilderOrderedByNewest()
             ->select('COUNT(recipe.id)')
+            ->resetDQLPart('orderBy')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -86,6 +87,7 @@ class RecipeBrowserBackend implements BackendInterface
         return $this->recipeRepository
             ->createQueryBuilderOrderedByNewest($searchQuery->searchText)
             ->select('COUNT(recipe.id)')
+            ->resetDQLPart('orderBy')
             ->getQuery()
             ->getSingleScalarResult();
     }

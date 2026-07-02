@@ -5,3 +5,4 @@ app_login: 'Log in'
 app_register: Register
 admin: 'Recipes Admin'
 nglayouts_admin: 'Layouts Admin'
+app_widget_demo: 'Widget Demo'
