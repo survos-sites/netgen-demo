@@ -1,0 +1,7 @@
+app_homepage: Home
+app_recipes: Recipes
+app_recipes_show: Recipe
+app_login: 'Log in'
+app_register: Register
+admin: 'Recipes Admin'
+nglayouts_admin: 'Layouts Admin'

@@ -3,7 +3,9 @@ framework:
         # The paths to make available to the asset mapper.
         paths:
             - assets/
-        missing_import_mode: strict
+        # netgen/layouts-ui ships a CSS file referencing a missing Bootstrap 3
+        # .eot font — 'strict' would hard-fail asset resolution for that bundle
+        missing_import_mode: warn
 
 when@prod:
     framework:
