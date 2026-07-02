@@ -975,7 +975,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         enabled?: bool|Param, // Default: false
  *     },
  *     html?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     markdown?: bool|array{
  *         enabled?: bool|Param, // Default: true
@@ -1825,6 +1825,127 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         stylesheets?: list<string|Param>,
  *     },
  * }
+ * @psalm-type BabdevPagerfantaConfig = array{
+ *     default_view?: scalar|Param|null, // Default: "default"
+ *     default_twig_template?: scalar|Param|null, // Default: "@BabDevPagerfanta/default.html.twig"
+ *     exceptions_strategy?: array{
+ *         out_of_range_page?: "to_http_not_found"|"custom"|Param, // Default: "to_http_not_found"
+ *         not_valid_current_page?: "to_http_not_found"|"custom"|Param, // Default: "to_http_not_found"
+ *     },
+ * }
+ * @psalm-type TwigComponentConfig = array{
+ *     defaults?: array<string, string|array{ // Default: []
+ *         template_directory?: scalar|Param|null, // Default: "components"
+ *         name_prefix?: scalar|Param|null, // Default: ""
+ *     }>,
+ *     anonymous_template_directory?: scalar|Param|null, // Defaults to `components`
+ *     profiler?: bool|array{ // Enables the profiler for Twig Component
+ *         enabled?: bool|Param, // Default: "%kernel.debug%"
+ *         collect_components?: bool|Param, // Collect components instances // Default: true
+ *     },
+ * }
+ * @psalm-type StofDoctrineExtensionsConfig = array{
+ *     orm?: array<string, array{ // Default: []
+ *         translatable?: scalar|Param|null, // Default: false
+ *         timestampable?: scalar|Param|null, // Default: false
+ *         blameable?: scalar|Param|null, // Default: false
+ *         sluggable?: scalar|Param|null, // Default: false
+ *         tree?: scalar|Param|null, // Default: false
+ *         loggable?: scalar|Param|null, // Default: false
+ *         ip_traceable?: scalar|Param|null, // Default: false
+ *         sortable?: scalar|Param|null, // Default: false
+ *         softdeleteable?: scalar|Param|null, // Default: false
+ *         uploadable?: scalar|Param|null, // Default: false
+ *         reference_integrity?: scalar|Param|null, // Default: false
+ *     }>,
+ *     mongodb?: array<string, array{ // Default: []
+ *         translatable?: scalar|Param|null, // Default: false
+ *         timestampable?: scalar|Param|null, // Default: false
+ *         blameable?: scalar|Param|null, // Default: false
+ *         sluggable?: scalar|Param|null, // Default: false
+ *         tree?: scalar|Param|null, // Default: false
+ *         loggable?: scalar|Param|null, // Default: false
+ *         ip_traceable?: scalar|Param|null, // Default: false
+ *         sortable?: scalar|Param|null, // Default: false
+ *         softdeleteable?: scalar|Param|null, // Default: false
+ *         uploadable?: scalar|Param|null, // Default: false
+ *         reference_integrity?: scalar|Param|null, // Default: false
+ *     }>,
+ *     class?: array{
+ *         translatable?: scalar|Param|null, // Default: "Gedmo\\Translatable\\TranslatableListener"
+ *         timestampable?: scalar|Param|null, // Default: "Gedmo\\Timestampable\\TimestampableListener"
+ *         blameable?: scalar|Param|null, // Default: "Gedmo\\Blameable\\BlameableListener"
+ *         sluggable?: scalar|Param|null, // Default: "Gedmo\\Sluggable\\SluggableListener"
+ *         tree?: scalar|Param|null, // Default: "Gedmo\\Tree\\TreeListener"
+ *         loggable?: scalar|Param|null, // Default: "Gedmo\\Loggable\\LoggableListener"
+ *         sortable?: scalar|Param|null, // Default: "Gedmo\\Sortable\\SortableListener"
+ *         softdeleteable?: scalar|Param|null, // Default: "Gedmo\\SoftDeleteable\\SoftDeleteableListener"
+ *         uploadable?: scalar|Param|null, // Default: "Gedmo\\Uploadable\\UploadableListener"
+ *         reference_integrity?: scalar|Param|null, // Default: "Gedmo\\ReferenceIntegrity\\ReferenceIntegrityListener"
+ *     },
+ *     softdeleteable?: array{
+ *         handle_post_flush_event?: bool|Param, // Default: false
+ *     },
+ *     uploadable?: array{
+ *         default_file_path?: scalar|Param|null, // Default: null
+ *         mime_type_guesser_class?: scalar|Param|null, // Default: "Stof\\DoctrineExtensionsBundle\\Uploadable\\MimeTypeGuesserAdapter"
+ *         default_file_info_class?: scalar|Param|null, // Default: "Stof\\DoctrineExtensionsBundle\\Uploadable\\UploadedFileInfo"
+ *         validate_writable_directory?: bool|Param, // Default: true
+ *     },
+ *     default_locale?: scalar|Param|null, // Default: "en"
+ *     translation_fallback?: bool|Param, // Default: false
+ *     persist_default_translation?: bool|Param, // Default: false
+ *     skip_translation_on_load?: bool|Param, // Default: false
+ *     metadata_cache_pool?: scalar|Param|null, // Default: null
+ * }
+ * @psalm-type ZenstruckFoundryConfig = array{
+ *     auto_refresh_proxies?: bool|Param|null, // Deprecated: Since 2.0 auto_refresh_proxies defaults to true and this configuration has no effect. // Whether to auto-refresh proxies by default (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#auto-refresh) // Default: null
+ *     enable_auto_refresh_with_lazy_objects?: bool|Param|null, // Enable auto-refresh using PHP 8.4 lazy objects (cannot be enabled if PHP < 8.4). // Default: null
+ *     faker?: array{ // Configure the faker used by your factories.
+ *         locale?: scalar|Param|null, // The default locale to use for faker. // Default: null
+ *         seed?: scalar|Param|null, // Deprecated: The "faker.seed" configuration is deprecated and will be removed in 3.0. Use environment variable "FOUNDRY_FAKER_SEED" instead. // Random number generator seed to produce the same fake values every run. // Default: null
+ *         manage_seed?: bool|Param, // Automatically manage faker seed to ensure consistent data between test runs. // Default: true
+ *         service?: scalar|Param|null, // Service id for custom faker instance. // Default: null
+ *     },
+ *     instantiator?: array{ // Configure the default instantiator used by your object factories.
+ *         use_constructor?: bool|Param, // Use the constructor to instantiate objects. // Default: true
+ *         allow_extra_attributes?: bool|Param, // Whether or not to skip attributes that do not correspond to properties. // Default: false
+ *         always_force_properties?: bool|Param, // Whether or not to skip setters and force set object properties (public/private/protected) directly. // Default: false
+ *         service?: scalar|Param|null, // Service id of your custom instantiator. // Default: null
+ *     },
+ *     global_state?: list<scalar|Param|null>,
+ *     persistence?: array{
+ *         flush_once?: bool|Param, // Flush only once per call of `PersistentObjectFactory::create()` in userland. // Default: false
+ *     },
+ *     orm?: array{
+ *         auto_persist?: bool|Param, // Deprecated: Since 2.4 auto_persist defaults to true and this configuration has no effect. // Automatically persist entities when created. // Default: true
+ *         reset?: array{
+ *             connections?: list<scalar|Param|null>,
+ *             entity_managers?: list<scalar|Param|null>,
+ *             mode?: \Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::SCHEMA|\Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::MIGRATE|Param, // Reset mode to use with ResetDatabase trait // Default: "schema"
+ *             migrations?: array{
+ *                 configurations?: list<scalar|Param|null>,
+ *             },
+ *         },
+ *     },
+ *     mongo?: array{
+ *         auto_persist?: bool|Param, // Deprecated: Since 2.4 auto_persist defaults to true and this configuration has no effect. // Automatically persist documents when created. // Default: true
+ *         reset?: array{
+ *             document_managers?: list<scalar|Param|null>,
+ *         },
+ *     },
+ *     make_factory?: array{
+ *         default_namespace?: scalar|Param|null, // Default namespace where factories will be created by maker. // Default: "Factory"
+ *         add_hints?: bool|Param, // Add "beginner" hints in the created factory. // Default: true
+ *     },
+ *     make_story?: array{
+ *         default_namespace?: scalar|Param|null, // Default namespace where stories will be created by maker. // Default: "Story"
+ *     },
+ * }
+ * @psalm-type LiveComponentConfig = array{
+ *     secret?: scalar|Param|null, // The secret used to compute fingerprints and checksums // Default: "%kernel.secret%"
+ *     fetch_credentials?: "same-origin"|"include"|"omit"|Param, // The default fetch credentials mode for all Live Components ('same-origin', 'include', 'omit') // Default: "same-origin"
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1843,6 +1964,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     knp_menu?: KnpMenuConfig,
  *     netgen_content_browser?: NetgenContentBrowserConfig,
  *     netgen_layouts?: NetgenLayoutsConfig,
+ *     babdev_pagerfanta?: BabdevPagerfantaConfig,
+ *     twig_component?: TwigComponentConfig,
+ *     stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *     live_component?: LiveComponentConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1864,6 +1989,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         knp_menu?: KnpMenuConfig,
  *         netgen_content_browser?: NetgenContentBrowserConfig,
  *         netgen_layouts?: NetgenLayoutsConfig,
+ *         babdev_pagerfanta?: BabdevPagerfantaConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         zenstruck_foundry?: ZenstruckFoundryConfig,
+ *         live_component?: LiveComponentConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1883,6 +2013,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         knp_menu?: KnpMenuConfig,
  *         netgen_content_browser?: NetgenContentBrowserConfig,
  *         netgen_layouts?: NetgenLayoutsConfig,
+ *         babdev_pagerfanta?: BabdevPagerfantaConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         live_component?: LiveComponentConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1903,6 +2037,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         knp_menu?: KnpMenuConfig,
  *         netgen_content_browser?: NetgenContentBrowserConfig,
  *         netgen_layouts?: NetgenLayoutsConfig,
+ *         babdev_pagerfanta?: BabdevPagerfantaConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         zenstruck_foundry?: ZenstruckFoundryConfig,
+ *         live_component?: LiveComponentConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

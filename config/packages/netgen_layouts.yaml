@@ -4,6 +4,56 @@ parameters:
 netgen_layouts:
     pagelayout: base.html.twig
 
+    value_types:
+        doctrine_recipe:
+            name: Recipe
+            manual_items: true
+
+    query_types:
+        latest_recipes:
+            name: 'Latest Recipes'
+
+    block_definitions:
+        list:
+            view_types:
+                one_by_two:
+                    name: 1x2 Featured Grid
+
+    view:
+        item_view:
+            # app = admin
+            app:
+                recipes_app:
+                    template: 'nglayouts/admin/recipe_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_recipe'
+            # default = frontend
+            default:
+                recipes_default:
+                    template: 'nglayouts/frontend/recipe_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_recipe'
+            ajax:
+                latest_recipes_default:
+                    template: 'nglayouts/frontend/recipe_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_recipe'
+
+        block_view:
+            app:
+                list/one_by_two:
+                    template: '@NetgenLayoutsStandard/app/block/list/grid.html.twig'
+                    match:
+                        block\definition: list
+                        block\view_type: one_by_two
+
+            default:
+                list/one_by_two:
+                    template: '@nglayouts/block/list/one_by_two_list.html.twig'
+                    match:
+                        block\definition: list
+                        block\view_type: one_by_two
+
 doctrine:
     dbal:
         connections:

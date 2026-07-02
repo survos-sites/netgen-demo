@@ -20,7 +20,7 @@ security:
                 users:
                     admin:
                         password: admin
-                        roles: [ROLE_NGLAYOUTS_ADMIN]
+                        roles: [ROLE_NGLAYOUTS_ADMIN, ROLE_ADMIN]
         all_users:
             chain:
                 providers: [app_user_provider, netgen_admin_in_memory]
@@ -51,6 +51,7 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/nglayouts/admin, roles: ROLE_NGLAYOUTS_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
