@@ -1,0 +1,24 @@
+{% extends nglayouts.layoutTemplate %}
+
+{% block title %}Recipes tagged: {{ tag }}{% endblock %}
+
+{# One Layout serves every tag - /recipes/tag/summer and /recipes/tag/picnic
+   both resolve to the same Layout via a single "route" rule; the
+   "recipes_by_tag" query type reads {tag} live from the request instead of
+   from a stored per-collection parameter.
+
+   Note: {{ parent() }} does NOT reliably work here since "extends
+   nglayouts.layoutTemplate" is a dynamic expression, not a literal string -
+   Twig can't statically link this block to layout_1.html.twig's "layout"
+   block across that boundary. So instead of wrapping parent(), we render
+   the zone directly, the same way layout_1.html.twig itself does. #}
+{% block layout %}
+    <div class="container-xl py-3">
+        <h2>My {{ tag|title }} Recipes</h2>
+    </div>
+    <div class="zone-layout-layout1">
+        <section class="zone zone-main">
+            {% nglayouts_render_zone 'main' %}
+        </section>
+    </div>
+{% endblock %}

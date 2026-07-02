@@ -43,6 +43,9 @@ class Recipe
     #[ORM\Column(length: 255)]
     private ?string $sourceUrl = null;
 
+    #[ORM\Column(type: Types::JSON)]
+    private array $tags = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -163,6 +166,18 @@ class Recipe
     public function setSourceUrl(string $sourceUrl): self
     {
         $this->sourceUrl = $sourceUrl;
+
+        return $this;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(array $tags): self
+    {
+        $this->tags = $tags;
 
         return $this;
     }

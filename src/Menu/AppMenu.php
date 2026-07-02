@@ -89,5 +89,10 @@ final class AppMenu implements KnpMenuHelperInterface
         if ($route === 'app_widget_demo') {
             $this->add($menu, 'app_widget_demo', label: 'Widget Demo');
         }
+
+        if ($route === 'app_recipes_by_tag') {
+            $tag = $request?->attributes->get('tag');
+            $this->add($menu, 'app_recipes_by_tag', ['tag' => $tag], label: ucfirst((string) $tag), translationDomain: false);
+        }
     }
 }

@@ -12,6 +12,8 @@ netgen_layouts:
     query_types:
         latest_recipes:
             name: 'Latest Recipes'
+        recipes_by_tag:
+            name: 'Recipes by Tag (contextual)'
 
     block_definitions:
         list:

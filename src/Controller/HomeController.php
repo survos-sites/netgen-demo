@@ -19,4 +19,12 @@ class HomeController extends AbstractController
     {
         return $this->render('home/widget_demo.html.twig');
     }
+
+    #[Route(path: '/recipes/tag/{tag}', name: 'app_recipes_by_tag')]
+    public function recipesByTag(string $tag): Response
+    {
+        return $this->render('home/recipes_by_tag.html.twig', [
+            'tag' => $tag,
+        ]);
+    }
 }

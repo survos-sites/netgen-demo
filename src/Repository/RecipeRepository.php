@@ -52,4 +52,35 @@ class RecipeRepository extends ServiceEntityRepository
 
         return $queryBuilder;
     }
+
+    /**
+     * Filters in PHP rather than SQL, since JSON-array containment isn't
+     * portable DQL — fine at demo scale, not meant to scale to many rows.
+     *
+     * @return Recipe[]
+     */
+    public function findByTag(string $tag, int $offset = 0, ?int $limit = null): array
+    {
+        $matching = $this->matchingByTag($tag);
+
+        return array_slice($matching, $offset, $limit);
+    }
+
+    public function countByTag(string $tag): int
+    {
+        return count($this->matchingByTag($tag));
+    }
+
+    /**
+     * @return Recipe[]
+     */
+    private function matchingByTag(string $tag): array
+    {
+        $recipes = $this->createQueryBuilderOrderedByNewest()->getQuery()->getResult();
+
+        return array_values(array_filter(
+            $recipes,
+            static fn (Recipe $recipe): bool => in_array($tag, $recipe->getTags(), true),
+        ));
+    }
 }

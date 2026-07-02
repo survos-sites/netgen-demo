@@ -14,6 +14,8 @@ use function Symfony\Component\String\u;
  */
 final class RecipeFactory extends PersistentObjectFactory
 {
+    public const TAGS = ['picnic', 'watermelon', 'summer', 'winter', 'quick', 'dessert', 'baking', 'holiday'];
+
     private ?array $availableImages = null;
 
     public function __construct()
@@ -54,6 +56,7 @@ final class RecipeFactory extends PersistentObjectFactory
                 'After cooling, add frosting if desired.',
             ],
             'sourceUrl' => 'https://www.lovefromtheoven.com/spoiled-dog-cake-recipe/',
+            'tags' => self::faker()->randomElements(self::TAGS, self::faker()->numberBetween(1, 3)),
         ];
     }
 
