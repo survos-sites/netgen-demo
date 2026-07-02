@@ -1,11 +1,29 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
+        # more specific rule must come first: PasswordHasherFactory picks the
+        # first matching entry, and InMemoryUser implements
+        # PasswordAuthenticatedUserInterface, so this order matters
+        Symfony\Component\Security\Core\User\InMemoryUser: 'plaintext'
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+        # temporary admin/admin login for the Netgen Layouts admin UI
+        netgen_admin_in_memory:
+            memory:
+                users:
+                    admin:
+                        password: admin
+                        roles: [ROLE_NGLAYOUTS_ADMIN]
+        all_users:
+            chain:
+                providers: [app_user_provider, netgen_admin_in_memory]
 
     firewalls:
         dev:
@@ -14,7 +32,15 @@ security:
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: all_users
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -24,7 +50,7 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/nglayouts/admin, roles: ROLE_NGLAYOUTS_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

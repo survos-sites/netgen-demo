@@ -35,6 +35,57 @@
             "migrations/.gitignore"
         ]
     },
+    "friendsofsymfony/http-cache-bundle": {
+        "version": "3.4.1"
+    },
+    "knplabs/knp-menu-bundle": {
+        "version": "v3.7.0"
+    },
+    "netgen/content-browser": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "122c2ac9b3350a586d97f326b71be2c7bc3e3ed3"
+        },
+        "files": [
+            "config/routes/netgen_content_browser.yaml"
+        ]
+    },
+    "netgen/content-browser-ui": {
+        "version": "2.0.0"
+    },
+    "netgen/layouts-core": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.0",
+            "ref": "bc96d39a58f03c067c5d92a0c122f319763b73b0"
+        },
+        "files": [
+            "config/routes/netgen_layouts.yaml"
+        ]
+    },
+    "netgen/layouts-standard": {
+        "version": "2.0.1"
+    },
+    "netgen/layouts-ui": {
+        "version": "2.0.0"
+    },
+    "php-http/discovery": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "config/packages/http_discovery.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "13.2",
         "recipe": {
@@ -270,6 +321,15 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/uid": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.0",
+            "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
+        }
+    },
     "symfony/ux-turbo": {
         "version": "3.2",
         "recipe": {
@@ -318,6 +378,9 @@
         "files": [
             "config/packages/messenger.yaml"
         ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.18.0"
     },
     "twig/extra-bundle": {
         "version": "v3.24.0"

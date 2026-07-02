@@ -646,7 +646,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     },
  *     uid?: bool|array{ // Uid configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         default_uuid_version?: 7|6|4|1|Param, // Default: 7
  *         name_based_uuid_version?: 5|3|Param, // Default: 5
  *         name_based_uuid_namespace?: scalar|Param|null,
@@ -655,7 +655,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         uuid47_secret?: scalar|Param|null, // A high-entropy secret used by the "uuid47_transformer" service. Defaults to "kernel.secret". // Default: null
  *     },
  *     html_sanitizer?: bool|array{ // HtmlSanitizer configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         sanitizers?: array<string, array{ // Default: []
  *             default_action?: "drop"|"block"|"allow"|Param, // Defines how the sanitizer must behave by default.
  *             allow_safe_elements?: bool|Param, // Allows "safe" elements and attributes. // Default: false
@@ -978,10 +978,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         enabled?: bool|Param, // Default: false
  *     },
  *     markdown?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     intl?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     cssinliner?: bool|array{
  *         enabled?: bool|Param, // Default: false
@@ -1474,6 +1474,357 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     generate_final_classes?: bool|Param, // Default: true
  *     generate_final_entities?: bool|Param, // Default: false
  * }
+ * @psalm-type SymfonycastsVerifyEmailConfig = array{
+ *     lifetime?: int|Param, // The length of time in seconds that a signed URI is valid for after it is created. // Default: 3600
+ * }
+ * @psalm-type FosHttpCacheConfig = array{
+ *     generate_url_type?: "auto"|1|0|3|2|Param, // Set what URLs to generate on CacheManager::invalidate/refresh and InvalidationListener. Auto tries to guess the right mode based on your proxy client.
+ *     cacheable?: array{
+ *         response?: array{
+ *             additional_status?: list<scalar|Param|null>,
+ *             expression?: scalar|Param|null, // Expression to decide whether response is cacheable. Replaces the default status codes. // Default: null
+ *         },
+ *     },
+ *     cache_control?: array{
+ *         defaults?: array{
+ *             overwrite?: bool|Param, // Whether to overwrite existing cache headers // Default: false
+ *         },
+ *         ttl_header?: scalar|Param|null, // Specify the header name to use with the cache_control.reverse_proxy_ttl setting // Default: "X-Reverse-Proxy-TTL"
+ *         rules?: list<array{ // Default: []
+ *             match?: array{
+ *                 path?: scalar|Param|null, // Request path. // Default: null
+ *                 query_string?: scalar|Param|null, // Request query string. // Default: null
+ *                 host?: scalar|Param|null, // Request host name. // Default: null
+ *                 methods?: string|array<string, scalar|Param|null>,
+ *                 ips?: string|array<string, scalar|Param|null>,
+ *                 attributes?: array<string, scalar|Param|null>,
+ *                 additional_response_status?: list<scalar|Param|null>,
+ *                 match_response?: scalar|Param|null, // Expression to decide whether response should be matched. Replaces cacheable configuration. // Default: null
+ *                 expression_language?: scalar|Param|null, // Service name of a custom ExpressionLanguage to use.
+ *             },
+ *             headers?: array{
+ *                 overwrite?: "default"|true|false|Param, // Whether to overwrite cache headers for this rule, defaults to the cache_control.defaults.overwrite setting // Default: "default"
+ *                 cache_control?: array{ // Add the specified cache control directives.
+ *                     max_age?: scalar|Param|null,
+ *                     s_maxage?: scalar|Param|null,
+ *                     private?: bool|Param,
+ *                     public?: bool|Param,
+ *                     must_revalidate?: bool|Param,
+ *                     proxy_revalidate?: bool|Param,
+ *                     no_transform?: bool|Param,
+ *                     no_cache?: bool|Param,
+ *                     no_store?: bool|Param,
+ *                     stale_if_error?: scalar|Param|null,
+ *                     stale_while_revalidate?: scalar|Param|null,
+ *                 },
+ *                 etag?: "weak"|"strong"|false|Param, // Set a simple ETag which is just the md5 hash of the response body. You can specify which type of ETag you want by passing "strong" or "weak". // Default: false
+ *                 last_modified?: scalar|Param|null, // Set a default last modified timestamp if none is set yet. Value must be parseable by DateTime
+ *                 reverse_proxy_ttl?: scalar|Param|null, // Specify a custom time to live in seconds for your caching proxy. This value is sent in the custom header configured in cache_control.ttl_header. // Default: null
+ *                 vary?: string|list<scalar|Param|null>,
+ *             },
+ *         }>,
+ *     },
+ *     proxy_client?: array{
+ *         default?: "varnish"|"nginx"|"symfony"|"cloudflare"|"cloudfront"|"fastly"|"noop"|Param, // If you configure more than one proxy client, you need to specify which client is the default.
+ *         varnish?: array{
+ *             tags_header?: scalar|Param|null, // HTTP header to use when sending tag invalidation requests to Varnish
+ *             header_length?: scalar|Param|null, // Maximum header length when invalidating tags. If there are more tags to invalidate than fit into the header, the invalidation request is split into several requests.
+ *             default_ban_headers?: array<string, scalar|Param|null>,
+ *             tag_mode?: "ban"|"purgekeys"|Param, // If you can enable the xkey module in Varnish, use the purgekeys mode for more efficient tag handling // Default: "ban"
+ *             http?: array{
+ *                 servers?: array<string, scalar|Param|null>,
+ *                 servers_from_jsonenv?: mixed, // Addresses of the hosts the caching proxy is running on (env var that contains a json array as a string). The values may be hostnames or ips, and with :port if not the default port 80.
+ *                 base_url?: scalar|Param|null, // Default host name and optional path for path based invalidation. // Default: null
+ *                 http_client?: scalar|Param|null, // Httplug async client service name to use for sending the requests. // Default: null
+ *                 request_factory?: scalar|Param|null, // Service name of PSR-17 message factory. // Default: null
+ *                 stream_factory?: scalar|Param|null, // Service name of PSR-17 stream factory. // Default: null
+ *             },
+ *         },
+ *         nginx?: array{
+ *             purge_location?: scalar|Param|null, // Path to trigger the purge on Nginx for different location purge. // Default: false
+ *             http?: array{
+ *                 servers?: array<string, scalar|Param|null>,
+ *                 servers_from_jsonenv?: mixed, // Addresses of the hosts the caching proxy is running on (env var that contains a json array as a string). The values may be hostnames or ips, and with :port if not the default port 80.
+ *                 base_url?: scalar|Param|null, // Default host name and optional path for path based invalidation. // Default: null
+ *                 http_client?: scalar|Param|null, // Httplug async client service name to use for sending the requests. // Default: null
+ *                 request_factory?: scalar|Param|null, // Service name of PSR-17 message factory. // Default: null
+ *                 stream_factory?: scalar|Param|null, // Service name of PSR-17 stream factory. // Default: null
+ *             },
+ *         },
+ *         symfony?: array{
+ *             tags_header?: scalar|Param|null, // HTTP header to use when sending tag invalidation requests to Symfony HttpCache // Default: "X-Cache-Tags"
+ *             tags_method?: scalar|Param|null, // HTTP method for sending tag invalidation requests to Symfony HttpCache // Default: "PURGETAGS"
+ *             header_length?: scalar|Param|null, // Maximum header length when invalidating tags. If there are more tags to invalidate than fit into the header, the invalidation request is split into several requests.
+ *             purge_method?: scalar|Param|null, // HTTP method to use when sending purge requests to Symfony HttpCache // Default: "PURGE"
+ *             use_kernel_dispatcher?: bool|Param, // Dispatches invalidation requests to the kernel directly instead of executing real HTTP requests. Requires special kernel setup! Refer to the documentation for more information. // Default: false
+ *             http?: array{
+ *                 servers?: array<string, scalar|Param|null>,
+ *                 servers_from_jsonenv?: mixed, // Addresses of the hosts the caching proxy is running on (env var that contains a json array as a string). The values may be hostnames or ips, and with :port if not the default port 80.
+ *                 base_url?: scalar|Param|null, // Default host name and optional path for path based invalidation. // Default: null
+ *                 http_client?: scalar|Param|null, // Httplug async client service name to use for sending the requests. // Default: null
+ *                 request_factory?: scalar|Param|null, // Service name of PSR-17 message factory. // Default: null
+ *                 stream_factory?: scalar|Param|null, // Service name of PSR-17 stream factory. // Default: null
+ *             },
+ *         },
+ *         cloudflare?: array{
+ *             authentication_token?: scalar|Param|null, // API authorization token, requires Zone.Cache Purge permissions
+ *             zone_identifier?: scalar|Param|null, // Identifier for your Cloudflare zone you want to purge the cache for
+ *             http?: array{
+ *                 servers?: array<string, scalar|Param|null>,
+ *                 http_client?: scalar|Param|null, // Httplug async client service name to use for sending the requests. // Default: null
+ *             },
+ *         },
+ *         cloudfront?: array{ // Configure a client to interact with AWS cloudfront. You need to install jean-beru/fos-http-cache-cloudfront to work with cloudfront
+ *             distribution_id?: scalar|Param|null, // Identifier for your CloudFront distribution you want to purge the cache for
+ *             client?: scalar|Param|null, // AsyncAws\CloudFront\CloudFrontClient client to use // Default: null
+ *             configuration?: mixed, // Client configuration from https://async-aws.com/configuration.html // Default: []
+ *         },
+ *         fastly?: array{ // Configure a client to interact with Fastly.
+ *             service_identifier?: scalar|Param|null, // Identifier for your Fastly service account.
+ *             authentication_token?: scalar|Param|null, // User token for authentication against Fastly APIs.
+ *             soft_purge?: scalar|Param|null, // Boolean for doing soft purges or not on tag & URL purging. Soft purges expires the cache unlike hard purge (removal), and allow grace/stale handling within Fastly VCL. // Default: true
+ *             http?: array{
+ *                 servers?: array<string, scalar|Param|null>,
+ *                 base_url?: scalar|Param|null, // Default host name and optional path for path based invalidation. // Default: "service"
+ *                 http_client?: scalar|Param|null, // Httplug async client service name to use for sending the requests. // Default: null
+ *             },
+ *         },
+ *         noop?: bool|Param,
+ *     },
+ *     cache_manager?: array{ // Configure the cache manager. Needs a proxy_client to be configured.
+ *         enabled?: true|false|"auto"|Param, // Allows to disable the invalidation manager. Enabled by default if you configure a proxy client. // Default: "auto"
+ *         custom_proxy_client?: scalar|Param|null, // Service name of a custom proxy client to use. With a custom client, generate_url_type defaults to ABSOLUTE_URL and tag support needs to be explicitly enabled. If no custom proxy client is specified, the first proxy client you configured is used.
+ *         generate_url_type?: "auto"|1|0|3|2|Param, // Deprecated: Configure the url type on top level to also have it apply to the InvalidationListener in addition to the CacheManager // Set what URLs to generate on invalidate/refresh Route. Auto tries to guess the right mode based on your proxy client. // Default: "auto"
+ *     },
+ *     tags?: array{
+ *         enabled?: true|false|"auto"|Param, // Allows to disable tag support. Enabled by default if you configured the cache manager and have a proxy client that supports tagging. // Default: "auto"
+ *         strict?: bool|Param, // Default: false
+ *         expression_language?: scalar|Param|null, // Service name of a custom ExpressionLanguage to use. // Default: null
+ *         response_header?: scalar|Param|null, // HTTP header that contains cache tags. Defaults to xkey-softpurge for Varnish xkey or X-Cache-Tags otherwise // Default: null
+ *         separator?: scalar|Param|null, // Character(s) to use to separate multiple tags. Defaults to " " for Varnish xkey or "," otherwise // Default: null
+ *         max_header_value_length?: scalar|Param|null, // If configured the tag header value will be split into multiple response headers of the same name (see "response_header" configuration key) that all do not exceed the configured "max_header_value_length" (recommended is 4KB = 4096) - configure in bytes. // Default: null
+ *         rules?: list<array{ // Default: []
+ *             match?: array{
+ *                 path?: scalar|Param|null, // Request path. // Default: null
+ *                 query_string?: scalar|Param|null, // Request query string. // Default: null
+ *                 host?: scalar|Param|null, // Request host name. // Default: null
+ *                 methods?: string|array<string, scalar|Param|null>,
+ *                 ips?: string|array<string, scalar|Param|null>,
+ *                 attributes?: array<string, scalar|Param|null>,
+ *             },
+ *             tags?: list<scalar|Param|null>,
+ *             tag_expressions?: list<scalar|Param|null>,
+ *         }>,
+ *     },
+ *     invalidation?: array{
+ *         enabled?: true|false|"auto"|Param, // Allows to disable the listener for invalidation. Enabled by default if the cache manager is configured. When disabled, the cache manager is no longer flushed automatically. // Default: "auto"
+ *         expression_language?: scalar|Param|null, // Service name of a custom ExpressionLanguage to use. // Default: null
+ *         rules?: list<array{ // Default: []
+ *             match?: array{
+ *                 path?: scalar|Param|null, // Request path. // Default: null
+ *                 query_string?: scalar|Param|null, // Request query string. // Default: null
+ *                 host?: scalar|Param|null, // Request host name. // Default: null
+ *                 methods?: string|array<string, scalar|Param|null>,
+ *                 ips?: string|array<string, scalar|Param|null>,
+ *                 attributes?: array<string, scalar|Param|null>,
+ *             },
+ *             routes?: array<string, array{ // Default: []
+ *                 ignore_extra_params?: bool|Param, // Default: true
+ *             }>,
+ *         }>,
+ *     },
+ *     user_context?: bool|array{ // Listener that returns the request for the user context hash as early as possible.
+ *         enabled?: bool|Param, // Default: false
+ *         match?: array{
+ *             matcher_service?: scalar|Param|null, // Service id of a request matcher that tells whether the request is a context hash request. // Default: "fos_http_cache.user_context.request_matcher"
+ *             accept?: scalar|Param|null, // Specify the accept HTTP header used for context hash requests. // Default: "application/vnd.fos.user-context-hash"
+ *             method?: scalar|Param|null, // Specify the HTTP method used for context hash requests. // Default: null
+ *         },
+ *         hash_cache_ttl?: scalar|Param|null, // Cache the response for the hash for the specified number of seconds. Setting this to 0 will not cache those responses at all. // Default: 0
+ *         always_vary_on_context_hash?: bool|Param, // Whether to always add the user context hash header name in the response Vary header. // Default: true
+ *         user_identifier_headers?: list<scalar|Param|null>,
+ *         session_name_prefix?: scalar|Param|null, // Prefix for session cookies. Must match your PHP session configuration. Set to false to ignore the session in user context. // Default: false
+ *         user_hash_header?: scalar|Param|null, // Name of the header that contains the hash information for the context. // Default: "X-User-Context-Hash"
+ *         role_provider?: bool|Param, // Whether to enable a provider that automatically adds all roles of the current user to the context. // Default: false
+ *         logout_handler?: bool|array{
+ *             enabled?: true|false|"auto"|Param, // Whether to enable the user context logout handler. // Default: "auto"
+ *         },
+ *     },
+ *     flash_message?: bool|array{ // Activate the flash message listener that puts flash messages into a cookie.
+ *         enabled?: bool|Param, // Default: false
+ *         name?: scalar|Param|null, // Name of the cookie to set for flashes. // Default: "flashes"
+ *         path?: scalar|Param|null, // Cookie path validity. // Default: "/"
+ *         host?: scalar|Param|null, // Cookie host name validity. // Default: null
+ *         secure?: scalar|Param|null, // Whether the cookie should only be transmitted over a secure HTTPS connection from the client. // Default: false
+ *     },
+ *     test?: array{
+ *         cache_header?: scalar|Param|null, // HTTP cache hit/miss header // Default: "X-Cache"
+ *         proxy_server?: array{ // Configure how caching proxy will be run in your tests
+ *             default?: "varnish"|"nginx"|Param, // If you configure more than one proxy server, specify which client is the default.
+ *             varnish?: array{
+ *                 config_file?: scalar|Param|null,
+ *                 binary?: scalar|Param|null, // Default: "varnishd"
+ *                 port?: int|Param, // Default: 6181
+ *                 ip?: scalar|Param|null, // Default: "127.0.0.1"
+ *             },
+ *             nginx?: array{
+ *                 config_file?: scalar|Param|null,
+ *                 binary?: scalar|Param|null, // Default: "nginx"
+ *                 port?: int|Param, // Default: 8080
+ *                 ip?: scalar|Param|null, // Default: "127.0.0.1"
+ *             },
+ *         },
+ *     },
+ *     debug?: bool|array{
+ *         enabled?: bool|Param, // Whether to send a debug header with the response to trigger a caching proxy to send debug information. If not set, defaults to kernel.debug. // Default: true
+ *         header?: scalar|Param|null, // The header to send if debug is true. // Default: "X-Cache-Debug"
+ *     },
+ * }
+ * @psalm-type KnpMenuConfig = array{
+ *     providers?: array{
+ *         builder_alias?: bool|Param, // Default: true
+ *     },
+ *     twig?: array{
+ *         template?: scalar|Param|null, // Default: "@KnpMenu/menu.html.twig"
+ *     },
+ *     templating?: bool|Param, // Default: false
+ *     default_renderer?: scalar|Param|null, // Default: "twig"
+ * }
+ * @psalm-type NetgenContentBrowserConfig = array{
+ *     item_types?: array<string, array{ // Default: []
+ *         name?: string|Param,
+ *         min_selected?: int|Param, // Default: 1
+ *         max_selected?: int|Param, // Default: 0
+ *         tree?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *         search?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *         preview?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *             template?: string|Param,
+ *         },
+ *         columns?: list<array{ // Default: []
+ *             name?: string|Param,
+ *             template?: string|Param,
+ *             value_provider?: string|Param,
+ *         }>,
+ *         default_columns?: list<string|Param>,
+ *     }>,
+ * }
+ * @psalm-type NetgenLayoutsConfig = array{
+ *     view?: array<string, array<string, array<string, array{ // Default: []
+ *         template: string|Param,
+ *         match: list<mixed>,
+ *         parameters?: list<mixed>,
+ *     }>>>,
+ *     design?: string|Param, // Default: "standard"
+ *     design_list?: array<string, list<string|Param>>,
+ *     default_view_templates?: array<string, array<string, string|Param>>,
+ *     http_cache?: array{
+ *         invalidation?: bool|array{
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *     },
+ *     block_definitions?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         handler?: string|Param,
+ *         config_provider?: string|Param,
+ *         name?: string|Param,
+ *         icon?: string|Param, // Default: null
+ *         translatable?: bool|Param, // Default: false
+ *         collections?: array{
+ *             default?: array{
+ *                 valid_item_types?: mixed, // Default: null
+ *                 valid_query_types?: mixed, // Default: null
+ *             },
+ *         },
+ *         forms?: array{
+ *             full?: bool|array{
+ *                 enabled?: bool|Param, // Default: true
+ *                 type?: string|Param, // Default: "Netgen\\Layouts\\Block\\Form\\FullEditType"
+ *             },
+ *             design?: bool|array{
+ *                 enabled?: bool|Param, // Default: false
+ *                 type?: string|Param, // Default: "Netgen\\Layouts\\Block\\Form\\DesignEditType"
+ *             },
+ *             content?: bool|array{
+ *                 enabled?: bool|Param, // Default: false
+ *                 type?: string|Param, // Default: "Netgen\\Layouts\\Block\\Form\\ContentEditType"
+ *             },
+ *         },
+ *         view_types?: array<string, bool|array{ // Default: []
+ *             enabled?: bool|Param, // Default: true
+ *             name?: string|Param,
+ *             item_view_types?: array<string, bool|array{ // Default: {"standard":{"name":"Standard","enabled":true}}
+ *                 enabled?: bool|Param, // Default: true
+ *                 name?: string|Param,
+ *             }>,
+ *             valid_parameters?: mixed, // Default: null
+ *         }>,
+ *         defaults?: array{
+ *             name?: string|Param, // Default: ""
+ *             view_type?: string|Param, // Default: ""
+ *             item_view_type?: string|Param, // Default: ""
+ *             parameters?: array<string, mixed>,
+ *         },
+ *     }>,
+ *     block_types?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         name?: string|Param,
+ *         icon?: string|Param, // Default: null
+ *         definition_identifier?: string|Param,
+ *         defaults?: array{
+ *             name?: string|Param, // Default: ""
+ *             view_type?: string|Param, // Default: ""
+ *             item_view_type?: string|Param, // Default: ""
+ *             parameters?: array<string, mixed>,
+ *         },
+ *     }>,
+ *     block_type_groups?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         name?: string|Param,
+ *         priority?: int|Param, // Default: 0
+ *         block_types?: list<string|array{ // Default: []
+ *             identifier?: string|Param,
+ *             priority?: int|Param, // Default: 0
+ *         }>,
+ *     }>,
+ *     layout_types?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         name?: string|Param,
+ *         icon?: string|Param, // Default: null
+ *         zones?: list<array{ // Default: []
+ *             name?: string|Param,
+ *             allowed_block_definitions?: list<string|Param>,
+ *         }>,
+ *     }>,
+ *     query_types?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         name?: string|Param,
+ *         priority?: int|Param, // Default: 0
+ *         handler?: string|Param,
+ *     }>,
+ *     pagelayout?: string|Param, // Default: ""
+ *     api_keys?: array{
+ *         google_maps?: string|Param, // Default: ""
+ *     },
+ *     value_types?: array<string, bool|array{ // Default: []
+ *         enabled?: bool|Param, // Default: true
+ *         name?: string|Param,
+ *         manual_items?: bool|Param, // Default: true
+ *     }>,
+ *     debug?: bool|Param, // Default: false
+ *     admin?: array{
+ *         javascripts?: list<string|Param>,
+ *         stylesheets?: list<string|Param>,
+ *     },
+ *     app?: array{
+ *         javascripts?: list<string|Param>,
+ *         stylesheets?: list<string|Param>,
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1487,6 +1838,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     twig_extra?: TwigExtraConfig,
  *     security?: SecurityConfig,
  *     monolog?: MonologConfig,
+ *     symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *     fos_http_cache?: FosHttpCacheConfig,
+ *     knp_menu?: KnpMenuConfig,
+ *     netgen_content_browser?: NetgenContentBrowserConfig,
+ *     netgen_layouts?: NetgenLayoutsConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1503,6 +1859,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         maker?: MakerConfig,
+ *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         fos_http_cache?: FosHttpCacheConfig,
+ *         knp_menu?: KnpMenuConfig,
+ *         netgen_content_browser?: NetgenContentBrowserConfig,
+ *         netgen_layouts?: NetgenLayoutsConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1517,6 +1878,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
+ *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         fos_http_cache?: FosHttpCacheConfig,
+ *         knp_menu?: KnpMenuConfig,
+ *         netgen_content_browser?: NetgenContentBrowserConfig,
+ *         netgen_layouts?: NetgenLayoutsConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1532,6 +1898,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
+ *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         fos_http_cache?: FosHttpCacheConfig,
+ *         knp_menu?: KnpMenuConfig,
+ *         netgen_content_browser?: NetgenContentBrowserConfig,
+ *         netgen_layouts?: NetgenLayoutsConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

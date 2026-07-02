@@ -1,0 +1,14 @@
+parameters:
+    env(NGLAYOUTS_DATABASE_URL): '%env(DATABASE_URL)%'
+
+netgen_layouts:
+    pagelayout: base.html.twig
+
+doctrine:
+    dbal:
+        connections:
+            default:
+                schema_filter: '~^(?!nglayouts_)~'
+            nglayouts:
+                url: '%env(resolve:NGLAYOUTS_DATABASE_URL)%'
+                profiling_collect_backtrace: '%kernel.debug%'
