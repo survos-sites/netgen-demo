@@ -5,3 +5,7 @@ netgen_content_browser:
             name: 'Recipes 🍓'
             preview:
                 template: 'nglayouts/content_browser/recipe_preview.html.twig'
+        doctrine_photo:
+            name: 'Photos 📷'
+            preview:
+                template: 'nglayouts/content_browser/photo_preview.html.twig'

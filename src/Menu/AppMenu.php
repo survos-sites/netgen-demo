@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Menu;
 
+use App\Repository\AlbumRepository;
 use App\Repository\RecipeRepository;
 use Survos\TablerBundle\Event\MenuEvent;
 use Survos\TablerBundle\Traits\KnpMenuHelperInterface;
@@ -20,6 +21,7 @@ final class AppMenu implements KnpMenuHelperInterface
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly RecipeRepository $recipeRepository,
+        private readonly AlbumRepository $albumRepository,
         private readonly ?AuthorizationCheckerInterface $authorizationChecker = null,
         private readonly ?Security $security = null,
     ) {
@@ -49,6 +51,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_homepage', label: 'Home');
         $this->add($menu, 'app_recipes', label: 'Recipes');
         $this->add($menu, 'app_widget_demo', label: 'Widget Demo');
+        $this->add($menu, 'app_albums', label: 'Albums');
 
         if ($this->authorizationChecker?->isGranted('ROLE_NGLAYOUTS_ADMIN')) {
             $this->add($menu, 'nglayouts_admin', label: 'Layouts Admin');
@@ -93,6 +96,22 @@ final class AppMenu implements KnpMenuHelperInterface
         if ($route === 'app_recipes_by_tag') {
             $tag = $request?->attributes->get('tag');
             $this->add($menu, 'app_recipes_by_tag', ['tag' => $tag], label: ucfirst((string) $tag), translationDomain: false);
+        }
+
+        if ($route === 'app_albums') {
+            $this->add($menu, 'app_albums', label: 'Albums');
+        }
+
+        if ($route === 'app_albums_show' || $route === 'app_story') {
+            $this->add($menu, 'app_albums', label: 'Albums');
+
+            $slug = $request?->attributes->get('slug') ?? $request?->attributes->get('album');
+            $album = $slug !== null ? $this->albumRepository->findOneBy(['slug' => $slug]) : null;
+            if ($album !== null) {
+                $routeName = $route === 'app_story' ? 'app_story' : 'app_albums_show';
+                $routeParam = $route === 'app_story' ? 'album' : 'slug';
+                $this->add($menu, $routeName, [$routeParam => $album->getSlug()], label: $album->getName(), translationDomain: false);
+            }
         }
     }
 }

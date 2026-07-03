@@ -1,0 +1,20 @@
+{% extends nglayouts.layoutTemplate %}
+
+{% block title %}{{ album ? album.name : 'Story' }}{% endblock %}
+
+{# The FotoStory pattern: one Layout serves every album via the
+   "photos_in_album" contextual query type, which reads {album} live from
+   this route (see PhotosInAlbumQueryTypeHandler and app_story route).
+   "layout they choose" = this Layout's blocks, built once in Layout Studio.
+   "their content" = whichever album's photos the URL points at. #}
+{% block layout %}
+    <div class="container-xl py-3">
+        <h2>{{ album ? album.name : 'Unknown album' }}</h2>
+        {% if album %}<p class="text-secondary">{{ album.description }}</p>{% endif %}
+    </div>
+    <div class="zone-layout-layout1">
+        <section class="zone zone-main">
+            {% nglayouts_render_zone 'main' %}
+        </section>
+    </div>
+{% endblock %}

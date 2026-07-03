@@ -8,12 +8,17 @@ netgen_layouts:
         doctrine_recipe:
             name: Recipe
             manual_items: true
+        doctrine_photo:
+            name: Photo
+            manual_items: true
 
     query_types:
         latest_recipes:
             name: 'Latest Recipes'
         recipes_by_tag:
             name: 'Recipes by Tag (contextual)'
+        photos_in_album:
+            name: 'Photos in Album (contextual)'
 
     block_definitions:
         list:
@@ -29,17 +34,29 @@ netgen_layouts:
                     template: 'nglayouts/admin/recipe_item.html.twig'
                     match:
                         item\value_type: 'doctrine_recipe'
+                photos_app:
+                    template: 'nglayouts/admin/photo_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_photo'
             # default = frontend
             default:
                 recipes_default:
                     template: 'nglayouts/frontend/recipe_item.html.twig'
                     match:
                         item\value_type: 'doctrine_recipe'
+                photos_default:
+                    template: 'nglayouts/frontend/photo_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_photo'
             ajax:
                 latest_recipes_default:
                     template: 'nglayouts/frontend/recipe_item.html.twig'
                     match:
                         item\value_type: 'doctrine_recipe'
+                photos_in_album_default:
+                    template: 'nglayouts/frontend/photo_item.html.twig'
+                    match:
+                        item\value_type: 'doctrine_photo'
 
         block_view:
             app:

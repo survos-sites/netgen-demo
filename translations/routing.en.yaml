@@ -7,3 +7,6 @@ admin: 'Recipes Admin'
 nglayouts_admin: 'Layouts Admin'
 app_widget_demo: 'Widget Demo'
 app_recipes_by_tag: 'Recipes by Tag'
+app_albums: Albums
+app_albums_show: Album
+app_story: Story
